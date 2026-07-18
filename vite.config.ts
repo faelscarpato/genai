@@ -7,6 +7,10 @@ export default defineConfig({
   plugins: [
     tanstackStart({
       server: { entry: "server" },
+      prerender: {
+        enabled: true,
+        crawlLinks: true,
+      },
     }),
     react(),
     tailwindcss(),
