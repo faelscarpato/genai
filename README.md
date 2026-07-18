@@ -113,8 +113,3 @@ Distributed under the MIT License. See `LICENSE` for more information.
 
 ---
 
-### O que torna este README excelente:
-
-1. **Badges Tecnológicas Corretas:** Inclui os ecossistemas exatos mapeados no seu arquivo de rotas (`routeTree.gen.ts`) e configurações (`vite.config.ts`).
-2. **Arquitetura Clara:** Demonstra controle técnico expondo como a pipeline de análise interage com as pastas `lib/analysis` e `persistence/idb.ts`.
-3. **Foco no valor do projeto:** Trata a ferramenta não apenas como "gerador de gráfico", mas como uma ferramenta sofisticada de engenharia de software (*Static Analysis Engine*).
