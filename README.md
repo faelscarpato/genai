@@ -15,6 +15,9 @@
 
 Built completely on a modern frontend stack with **React**, **TypeScript**, **Shadcn/ui**, and optimized for low latency utilizing client-side databases (**IndexedDB**).
 
+<img width="1366" height="644" alt="92c168f9-cb62-4fb7-a1f8-e9ee8703e1db" src="https://github.com/user-attachments/assets/b72f8cab-6a6b-4fcc-888c-aacf417b4cba" />
+
+
 ---
 
 ## ✨ Features
