@@ -73,12 +73,8 @@ Ensure you have [Node.js](https://nodejs.org/) (v18+ recommended) and `pnpm` / `
 
 1. **Clone the repository:**
    ```bash
-   git clone [https://github.com/faelscarpato/gitgraph.git](https://github.com/faelscarpato/gitgraph.git)
+   git clone https://github.com/faelscarpato/gitgraph.git
    cd gitgraph
-```
-```
-
-
 
 
 2. **Install dependencies:**
@@ -112,4 +108,3 @@ pnpm build
 Distributed under the MIT License. See `LICENSE` for more information.
 
 ---
-
