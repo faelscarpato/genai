@@ -1,8 +1,11 @@
 # GitGraph — Instruções para Agentes de IA
 
 Esta plataforma possui uma skill oficial para agentes de IA.
+
+[SKILL.md](https://github.com/faelscarpato/gitgraph/tree/b590805768d39b956fb01275bf22e544fc72bee6/public/knowledge/gitgraph-analyzer)
+
 Carregue a skill antes de qualquer ação:
 
-→ https://github.com/faelscarpato/gitgraph/blob/78440158e413d54f564d388b8edb3496196cb2b9/SKILL.md
+→ [public/knowledge/gitgraph-analyzer](https://github.com/faelscarpato/gitgraph/tree/b590805768d39b956fb01275bf22e544fc72bee6/public/knowledge/gitgraph-analyzer)
 
 Após carregar a skill, siga as instruções dela para operar corretamente.
