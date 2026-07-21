@@ -8,6 +8,8 @@ export interface ProviderProfile {
   defaultModel?: string;
   kind: ProviderKind;
   createdAt: number;
+  enabled?: boolean;
+  priority?: number;
 }
 
 export interface ProviderTestResult {

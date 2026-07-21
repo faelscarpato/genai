@@ -1,107 +1,69 @@
-import { useState } from "react";
+import { useMemo, useState } from "react";
 import { parseRepoUrl } from "@/lib/analyzer";
 
 interface Props {
   onSubmit: (v: { repoUrl: string; branch?: string; apiKey?: string }) => void;
   disabled?: boolean;
+  placeholder?: string;
 }
 
-export function RepoForm({ onSubmit, disabled }: Props) {
+export function RepoForm({
+  onSubmit,
+  disabled,
+  placeholder = "https://github.com/facebook/react",
+}: Props) {
   const [repoUrl, setRepoUrl] = useState("");
-  const [branch, setBranch] = useState("");
-  const [apiKey, setApiKey] = useState("");
   const [touched, setTouched] = useState(false);
 
-  const parsed = parseRepoUrl(repoUrl);
+  const parsed = useMemo(() => parseRepoUrl(repoUrl.trim()), [repoUrl]);
+
   const urlError =
-    touched && repoUrl && !parsed
-      ? "Enter a valid GitHub URL (https://github.com/owner/repo)."
+    touched && repoUrl.trim() && !parsed
+      ? "Insira uma URL válida de repositório público."
       : null;
 
   const submit = (e: React.FormEvent) => {
     e.preventDefault();
     setTouched(true);
-    if (!parsed) return;
+    if (!parsed || disabled) return;
+
     onSubmit({
       repoUrl: repoUrl.trim(),
-      branch: branch.trim() || undefined,
-      apiKey: apiKey.trim() || undefined,
     });
   };
 
   return (
-    <form onSubmit={submit} className="space-y-4">
-      <div className="space-y-1.5">
-        <label
-          htmlFor="repo"
-          className="block text-xs font-medium uppercase tracking-wider text-muted-foreground"
-        >
-          Repository URL
-        </label>
-        <input
-          id="repo"
-          type="url"
-          required
-          value={repoUrl}
-          onChange={(e) => setRepoUrl(e.target.value)}
-          onBlur={() => setTouched(true)}
-          placeholder="https://github.com/facebook/react"
-          disabled={disabled}
-          className="focus-ring w-full rounded-md border border-input bg-surface px-3 py-2.5 font-mono text-sm text-foreground placeholder:text-muted-foreground/60 disabled:opacity-50"
-        />
-        {urlError && <p className="text-xs text-destructive">{urlError}</p>}
-      </div>
-
-      <div className="grid gap-4 sm:grid-cols-2">
-        <div className="space-y-1.5">
-          <label
-            htmlFor="branch"
-            className="block text-xs font-medium uppercase tracking-wider text-muted-foreground"
-          >
-            Branch <span className="text-muted-foreground/60 normal-case">— optional</span>
+    <form onSubmit={submit} className="w-full">
+      <div className="flex flex-col gap-3 sm:flex-row">
+        <div className="flex-1">
+          <label htmlFor="repo-url" className="sr-only">
+            Repository URL
           </label>
           <input
-            id="branch"
-            type="text"
-            value={branch}
-            onChange={(e) => setBranch(e.target.value)}
-            placeholder="main"
-            disabled={disabled}
-            className="focus-ring w-full rounded-md border border-input bg-surface px-3 py-2.5 font-mono text-sm text-foreground placeholder:text-muted-foreground/60 disabled:opacity-50"
-          />
-        </div>
-        <div className="space-y-1.5">
-          <label
-            htmlFor="key"
-            className="block text-xs font-medium uppercase tracking-wider text-muted-foreground"
-          >
-            AI API key <span className="text-muted-foreground/60 normal-case">— optional</span>
-          </label>
-          <input
-            id="key"
-            type="password"
-            value={apiKey}
-            onChange={(e) => setApiKey(e.target.value)}
-            placeholder="sk-…"
+            id="repo-url"
+            type="url"
+            required
+            value={repoUrl}
+            onChange={(e) => setRepoUrl(e.target.value)}
+            onBlur={() => setTouched(true)}
+            placeholder={placeholder}
             disabled={disabled}
             autoComplete="off"
-            className="focus-ring w-full rounded-md border border-input bg-surface px-3 py-2.5 font-mono text-sm text-foreground placeholder:text-muted-foreground/60 disabled:opacity-50"
+            spellCheck={false}
+            className="focus-ring h-12 w-full rounded-xl border border-input bg-surface px-4 font-mono text-sm text-foreground placeholder:text-muted-foreground/60 disabled:cursor-not-allowed disabled:opacity-50"
           />
+          {urlError && <p className="mt-2 text-xs text-destructive">{urlError}</p>}
         </div>
+
+        <button
+          type="submit"
+          disabled={disabled || !repoUrl.trim()}
+          className="focus-ring inline-flex h-12 items-center justify-center gap-2 rounded-xl bg-primary px-5 text-sm font-semibold text-primary-foreground transition-opacity hover:opacity-90 disabled:cursor-not-allowed disabled:opacity-40"
+        >
+          {disabled ? "Analisando..." : "Iniciar análise"}
+          <span aria-hidden>→</span>
+        </button>
       </div>
-
-      <button
-        type="submit"
-        disabled={disabled || !repoUrl}
-        className="focus-ring inline-flex w-full items-center justify-center gap-2 rounded-md bg-primary px-4 py-2.5 text-sm font-semibold text-primary-foreground transition-opacity hover:opacity-90 disabled:opacity-40 sm:w-auto"
-      >
-        {disabled ? "Analyzing…" : "Analyze repository"}
-        <span aria-hidden>→</span>
-      </button>
-
-      <p className="text-xs text-muted-foreground">
-        Your key stays in your browser. No data is stored on our servers.
-      </p>
     </form>
   );
 }

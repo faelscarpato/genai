@@ -9,19 +9,17 @@ export async function testProvider(p: ProviderProfile): Promise<ProviderTestResu
   const headers: Record<string, string> = { "Content-Type": "application/json" };
   if (p.apiKey) headers.Authorization = `Bearer ${p.apiKey}`;
 
-  // Try /models first (cheap, standard).
   try {
     const r = await fetch(joinUrl(p.baseUrl, "/models"), { headers, method: "GET" });
     const latency = Math.round(performance.now() - started);
+
     if (r.ok) {
       let detected: string | undefined;
       try {
         const data = await r.json();
         const first = data?.data?.[0]?.id ?? data?.models?.[0]?.id ?? data?.models?.[0];
         if (typeof first === "string") detected = first;
-      } catch {
-        // ignore JSON parse errors
-      }
+      } catch {}
       return {
         ok: true,
         latencyMs: latency,
@@ -30,6 +28,7 @@ export async function testProvider(p: ProviderProfile): Promise<ProviderTestResu
         message: `Connected in ${latency}ms`,
       };
     }
+
     if (r.status === 401 || r.status === 403) {
       return {
         ok: false,
@@ -38,10 +37,7 @@ export async function testProvider(p: ProviderProfile): Promise<ProviderTestResu
         message: "Authentication failed. Check the API key.",
       };
     }
-    // Fallback to chat.completions ping
-  } catch (e) {
-    // network / CORS - will try fallback
-  }
+  } catch {}
 
   try {
     const r2 = await fetch(joinUrl(p.baseUrl, "/chat/completions"), {
@@ -53,7 +49,9 @@ export async function testProvider(p: ProviderProfile): Promise<ProviderTestResu
         max_tokens: 1,
       }),
     });
+
     const latency = Math.round(performance.now() - started);
+
     if (r2.ok) {
       return {
         ok: true,
@@ -63,6 +61,7 @@ export async function testProvider(p: ProviderProfile): Promise<ProviderTestResu
         modelDetected: p.defaultModel,
       };
     }
+
     const text = await r2.text().catch(() => "");
     return {
       ok: false,
